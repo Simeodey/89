@@ -7,7 +7,7 @@ export default class Application extends EventEmitter {
       READY: "ready",
     };
   }
- static #url = "https://swapi.boom.dev/api/planets";
+ static #InitialUrl = "https://swapi.boom.dev/api/planets";
   constructor() {
     super();
    
@@ -15,9 +15,6 @@ export default class Application extends EventEmitter {
     this._startLoading();
     this._load();
     this._stopLoading();
-
-    document.body.querySelector(".main").appendChild(box);
-
     this.emit(Application.events.READY);
   }
 
@@ -42,7 +39,9 @@ export default class Application extends EventEmitter {
     `;
   }
 async _load(){
-  let url = this.#url
+  
+  let url = Application.#InitialUrl
+  console.log(url)
   while(url){
     const response = await fetch(url);
     const objectResponse = await response.json();
@@ -50,6 +49,7 @@ async _load(){
   .forEach(element => {
       this._create(element)
     });
+    url = objectResponse.next
   }
 }
 
